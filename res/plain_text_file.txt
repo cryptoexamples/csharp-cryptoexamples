@@ -1,3 +1,0 @@
-Text that is going to be sent over an insecure channel and must be encrypted at all costs!
-Also with multiple lines!
-This is the third line.

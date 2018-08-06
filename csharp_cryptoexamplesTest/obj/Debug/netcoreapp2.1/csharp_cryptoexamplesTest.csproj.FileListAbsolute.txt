@@ -1,0 +1,17 @@
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\obj\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.csprojAssemblyReference.cache
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\obj\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.csproj.CoreCompileInputs.cache
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\obj\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.AssemblyInfoInputs.cache
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\obj\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.AssemblyInfo.cs
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\xunit.runner.visualstudio.dotnetcore.testadapter.dll
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\xunit.runner.reporters.netcoreapp10.dll
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\xunit.runner.utility.netcoreapp10.dll
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.deps.json
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.runtimeconfig.json
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.runtimeconfig.dev.json
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.dll
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.pdb
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\csharp_cryptoexamples.dll
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\bin\Debug\netcoreapp2.1\csharp_cryptoexamples.pdb
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\obj\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.csproj.CopyComplete
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\obj\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.dll
+C:\Users\Nico\GitRepo\csharp_cryptoExamplesHome\csharp_cryptoexamples\csharp_cryptoexamplesTest\obj\Debug\netcoreapp2.1\csharp_cryptoexamplesTest.pdb

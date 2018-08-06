@@ -1,5 +1,0 @@
-cryptography
-pylint
-pytest
-coverage
-pytest-cov

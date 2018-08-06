@@ -7,39 +7,17 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Added 
-
-- added python 3.7 to travis
-- added valid python versions in each example markdown page
-- added install instructions in each example markdown page
-- added pylint
-
-### Changed
-
-- changed logging to lazy logging
-- changed salt to 64 bytes for symmetric encryption
-- changed iterations to 10000 for symmetric encryption
-- changed functions to have demonstrate_
-- changed functions to be parameterized
-- changed file encryption to use a file instead of text
-
-## [0.1.1] - 2018-07-11
-
-### Changed
-
-- fixed wrong link to rsa signature file on landing page
-
-## [0.1.0] - 2018-07-06
+## [0.1.0] - 2018-08-02
 
 ### Added
 
 - added Changelog
-- added Asymmetric RSA String Encryption
-- added Asymmetric RSA String Signature
-- added Asymmetric RSA Key Storage
+- added Asymmetric Encryption
+- added Signature
+- added Key Storage
 - added Symmetric key based String Encryption
 - added Symmetric password based String Encryption
-- added Symmetric password based File Encryption
+- added Symmetric File Encryption
 - added Hashing
 - added testing
 
