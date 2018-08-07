@@ -1,0 +1,14 @@
+language: csharp
+solution: csharp_cryptoexamples.sln
+matrix:
+  include:
+    - dotnet: 2.1
+      mono: none
+      env: DOTNETCORE=1  # optional, can be used to take different code paths in your script
+    - mono: latest
+addons:
+  sonarcloud:
+    organization: "kmindi-github" # the key of the org you chose at step #3
+script:
+  - dotnet build csharp_cryptoexamples.sln
+  - sonar-scanner
