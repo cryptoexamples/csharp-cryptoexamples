@@ -1,11 +1,16 @@
 using System;
 using Xunit;
 using com.cryptoexamples.csharp;
+using System.Security.Cryptography;
+using System.Text;
 
 namespace XUnitTestProject1
 {
     public class UnitTest1
     {
+        private String plainText = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.";
+        private String plainText2 = "Text that is going to be sent over an insecure channel and must be encrypted at all costs!";
+
         [Fact]
         public void AsymmetricStringEncryptionTest()
         {
@@ -30,7 +35,7 @@ namespace XUnitTestProject1
             Console.SetOut(ExampleFileEncryption.LOGGER);
             ExampleFileEncryption.Main(null);
 
-            Assert.Equal("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.", ExampleFileEncryption.LOGGER.ToString());
+            Assert.Equal(plainText, ExampleFileEncryption.LOGGER.ToString());
         }
 
         [Fact]
@@ -55,6 +60,38 @@ namespace XUnitTestProject1
             // Basic test if encryption and decryption is working.
             ExampleStringEncryptionKeyBasedInOneMethod.Main(null);
             Assert.Equal("They are the same: True", ExampleStringEncryptionKeyBasedInOneMethod.LOGGER.ToString());
+        }
+
+        [Fact]
+        public void KeyStorageProviderTest()
+        {
+            String ContainerName = "MyContainer";
+            byte[] dataToEncrypt = Encoding.UTF8.GetBytes(plainText2);
+            byte[] encryptedData;
+            String decryptedString;
+
+            CspParameters cp = new CspParameters
+            {
+                KeyContainerName = ContainerName
+            };
+            RSACryptoServiceProvider rsa = new RSACryptoServiceProvider(cp);
+
+            //Encrypt
+            encryptedData = rsa.Encrypt(dataToEncrypt, false);
+
+            CspParameters getParametersFromKSP = new CspParameters
+            {
+                KeyContainerName = ContainerName
+            };
+
+            // Create a new instance of RSACryptoServiceProvider that accesses  
+            // the key container MyKeyContainerName.  
+            RSACryptoServiceProvider rsa2 = new RSACryptoServiceProvider(getParametersFromKSP);
+
+            //Decrypt
+            decryptedString = Encoding.UTF8.GetString(rsa2.Decrypt(encryptedData, false));
+
+            Assert.Equal(decryptedString, plainText2);
         }
     }
 }
