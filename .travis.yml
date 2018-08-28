@@ -2,7 +2,6 @@ language: csharp
 solution: csharp_cryptoexamples.sln
 install:
   - dotnet restore
- # - nuget install xunit.runners -Version 2.0.0 -OutputDirectory testrunner
 matrix:
   include:
     - dotnet: 2.1
@@ -13,8 +12,5 @@ addons:
     organization: "kmindi-github" # the key of the org you chose at step #3
 script:
   - dotnet build csharp_cryptoexamples.sln
-  - sonar-scanner
   - dotnet test /home/travis/build/cryptoexamples/csharp-cryptoexamples/csharp_cryptoexamplesTest/csharp_cryptoexamplesTest.csproj
-
- # - xbuild /p:Configuration=Release csharp_cryptoexamples.sln
- # - dotnet ./testrunner/xunit.runners.2.0.0/tools/xunit.console.clr4.exe ./csharp-cryptoexamplesTest/bin/Release/csharp_cryptoexamplesTest.dll
+  - sonar-scanner

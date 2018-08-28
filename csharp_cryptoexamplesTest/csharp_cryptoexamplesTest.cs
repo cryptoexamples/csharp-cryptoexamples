@@ -62,7 +62,7 @@ namespace XUnitTestProject1
             Assert.Equal("They are the same: True", ExampleStringEncryptionKeyBasedInOneMethod.LOGGER.ToString());
         }
 
-        [Fact]
+        /*[Fact]
         public void KeyStorageProviderTest()
         {
             String ContainerName = "MyContainer";
@@ -92,6 +92,6 @@ namespace XUnitTestProject1
             decryptedString = Encoding.UTF8.GetString(rsa2.Decrypt(encryptedData, false));
 
             Assert.Equal(decryptedString, plainText2);
-        }
+        }*/
     }
 }
