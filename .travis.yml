@@ -14,7 +14,7 @@ addons:
 script:
   - dotnet build csharp_cryptoexamples.sln
   - sonar-scanner
-  - dotnet test ./csharp-cryptoexamplesTest/csharp_cryptoexamplesTest.csproj
+  - dotnet test /home/travis/build/cryptoexamples/csharp-cryptoexamples/csharp_cryptoexamplesTest/csharp_cryptoexamplesTest.csproj
 
  # - xbuild /p:Configuration=Release csharp_cryptoexamples.sln
  # - dotnet ./testrunner/xunit.runners.2.0.0/tools/xunit.console.clr4.exe ./csharp-cryptoexamplesTest/bin/Release/csharp_cryptoexamplesTest.dll
