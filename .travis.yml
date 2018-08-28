@@ -1,7 +1,6 @@
 language: csharp
 solution: csharp_cryptoexamples.sln
 install:
-  - nuget restore csharp_cryptoexamples.sln
   - nuget install xunit.runners -Version 2.0.0 -OutputDirectory testrunner
 matrix:
   include:
@@ -16,4 +15,4 @@ script:
   - sonar-scanner
 
   - xbuild /p:Configuration=Release csharp_cryptoexamples.sln
-  - dotnet ./testrunner/xunit.runners.2.0.0/tools/xunit.console.clr4.exe ./csharp-cryptoexamplesTest/bin/Debug/csharp_cryptoexamplesTest.dll
+  - dotnet ./testrunner/xunit.runners.2.0.0/tools/xunit.console.clr4.exe ./csharp-cryptoexamplesTest/bin/Release/csharp_cryptoexamplesTest.dll
