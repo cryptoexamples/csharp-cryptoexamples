@@ -19,6 +19,16 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - added Hashing
 - added testing
 
+## [0.1.0] - 2018-09-06
+
+### Added
+
+- first released version of the CSharp-CryptoExamples.
+
+### Removed
+
+- removed Key Storage because of incompability with other platforms than Windows.
+
 ## [X.Y.Z] - XXXX-XX-XX (TEMPLATE for new versions)
 
 ### Added
