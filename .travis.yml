@@ -12,5 +12,5 @@ addons:
     organization: "kmindi-github" # the key of the org you chose at step #3
 script:
   - dotnet build csharp_cryptoexamples.sln
-  - dotnet test /home/travis/build/cryptoexamples/csharp-cryptoexamples/csharp_cryptoexamplesTest/csharp_cryptoexamplesTest.csproj
+  - dotnet test ./csharp_cryptoexamplesTest/csharp_cryptoexamplesTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover
   - sonar-scanner
