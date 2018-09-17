@@ -1,6 +1,7 @@
 language: csharp
 solution: csharp_cryptoexamples.sln
 install:
+  - dotnet tool install --global dotnet-sonarscanner
   - dotnet restore
 matrix:
   include:
@@ -18,7 +19,7 @@ script:
   - dotnet build csharp_cryptoexamples.sln
   - dotnet test ./csharp_cryptoexamplesTest/csharp_cryptoexamplesTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=../lcov
   - dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN" || true
-  - sonar-scanner
+  #- sonar-scanner
   
 cache:
   directories:
