@@ -1,20 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using Serilog;
+using System;
 using System.Security.Cryptography;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Logging.Console;
 
 namespace com.cryptoexamples.csharp
 {
     public class ExampleAsymetricStringEncryption
     {
-        public static ILogger logger = new LoggerFactory().CreateLogger<ExampleAsymetricStringEncryption>();
-
         public static void Main(string[] args)
         {
-            ILoggerFactory loggerFactory = new LoggerFactory().AddProvider(new ConsoleLoggerProvider(
-                (text, logLevel) => logLevel >= LogLevel.Verbose, true));
-            logger.LogInformation("This is a test of the emergency broadcast system.");
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateAsymetricStringEncryption("Text that is going to be sent over an insecure channel and must be encrypted at all costs!");
         }
 
@@ -31,7 +25,7 @@ namespace com.cryptoexamples.csharp
             //Decrypt
             decryptedString = System.Text.Encoding.UTF8.GetString(RSA.Decrypt(encryptedData, false));
 
-            Console.Write("Decrypted and original plain text are the same: {0}", decryptedString.Equals(plainText));
+            Log.Information("Decrypted and original plain text are the same: {0}", decryptedString.Equals(plainText));
 
             return decryptedString;
         }

@@ -1,9 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Text;
 using System.Security.Cryptography;
-using System.Xml;
 
 namespace csharp_cryptoexamples.src
 {

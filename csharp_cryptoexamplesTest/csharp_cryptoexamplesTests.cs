@@ -1,41 +1,47 @@
 using System;
 using Xunit;
 using com.cryptoexamples.csharp;
-using System.Security.Cryptography;
-using System.Text;
-using Microsoft.Extensions.Logging;
+using System.IO;
 
 namespace XUnitTestProject1
 {
     public class UnitTest1
     {
-        private String plainText = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.";
-        private String plainText2 = "Text that is going to be sent over an insecure channel and must be encrypted at all costs!";
+        private readonly String plainText = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.";
+        private StringWriter outMessage;
+        private StringWriter errMessage;
+        
+        private void Refresh()
+        {
+            outMessage = new StringWriter();
+            errMessage = new StringWriter();
+            Console.SetOut(outMessage);
+            Console.SetError(errMessage);
+        }
 
         [Fact]
         public void AsymmetricStringEncryptionTest()
         {
+            Refresh();
             ExampleAsymetricStringEncryption.Main(null);
-
-            Assert.Equal("Decrypted and original plain text are the same: True", ExampleAsymetricStringEncryption.logger);
+            Assert.Contains("Decrypted and original plain text are the same: True", outMessage.ToString());
         }
 
         [Fact]
         public void StringEncryptionPasswordBasedTest()
         {
-            Console.SetOut(ExampleStringEncryptionPasswordBased.LOGGER);
+            Refresh();
             // Basic test if encryption and decryption is working.
             ExampleStringEncryptionPasswordBased.Main(null);
-            Assert.Equal("They are the same: True", ExampleStringEncryptionPasswordBased.LOGGER.ToString());
+            Assert.Contains("They are the same: True", outMessage.ToString());
         }
 
         [Fact]
         public void FileEncryptionTest()
         {
-            Console.SetOut(ExampleFileEncryption.LOGGER);
+            Refresh();
             ExampleFileEncryption.Main(null);
-
-            Assert.Equal(plainText, ExampleFileEncryption.LOGGER.ToString());
+            Assert.Contains(plainText, outMessage.ToString());
         }
 
         [Fact]
@@ -47,19 +53,18 @@ namespace XUnitTestProject1
         [Fact]
         public void SigningTest()
         {
-            Console.SetOut(ExampleSigning.LOGGER);
+            Refresh();
             ExampleSigning.Main(null);
-
-            Assert.Equal("The data was verified.", ExampleSigning.LOGGER.ToString());
+            Assert.Contains("The data was verified.", outMessage.ToString());
         }
 
         [Fact]
         public void StringEncryptionKeyBasedTest()
         {
-            Console.SetOut(ExampleStringEncryptionKeyBasedInOneMethod.LOGGER);
+            Refresh();
             // Basic test if encryption and decryption is working.
             ExampleStringEncryptionKeyBasedInOneMethod.Main(null);
-            Assert.Equal("They are the same: True", ExampleStringEncryptionKeyBasedInOneMethod.LOGGER.ToString());
+            Assert.Contains("They are the same: True", outMessage.ToString());
         }
 
         /*[Fact]
