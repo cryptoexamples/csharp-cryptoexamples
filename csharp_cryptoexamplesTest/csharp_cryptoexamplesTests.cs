@@ -3,6 +3,7 @@ using Xunit;
 using com.cryptoexamples.csharp;
 using System.Security.Cryptography;
 using System.Text;
+using Microsoft.Extensions.Logging;
 
 namespace XUnitTestProject1
 {
@@ -14,10 +15,9 @@ namespace XUnitTestProject1
         [Fact]
         public void AsymmetricStringEncryptionTest()
         {
-            Console.SetOut(ExampleAsymetricStringEncryption.LOGGER);
             ExampleAsymetricStringEncryption.Main(null);
 
-            Assert.Equal("Decrypted and original plain text are the same: True", ExampleAsymetricStringEncryption.LOGGER.ToString());
+            Assert.Equal("Decrypted and original plain text are the same: True", ExampleAsymetricStringEncryption.logger);
         }
 
         [Fact]

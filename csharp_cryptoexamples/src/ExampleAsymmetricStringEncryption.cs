@@ -1,15 +1,20 @@
 ﻿using System;
 using System.IO;
 using System.Security.Cryptography;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Logging.Console;
 
 namespace com.cryptoexamples.csharp
 {
     public class ExampleAsymetricStringEncryption
     {
-        public static StringWriter LOGGER = new StringWriter();
+        public static ILogger logger = new LoggerFactory().CreateLogger<ExampleAsymetricStringEncryption>();
 
         public static void Main(string[] args)
         {
+            ILoggerFactory loggerFactory = new LoggerFactory().AddProvider(new ConsoleLoggerProvider(
+                (text, logLevel) => logLevel >= LogLevel.Verbose, true));
+            logger.LogInformation("This is a test of the emergency broadcast system.");
             DemonstrateAsymetricStringEncryption("Text that is going to be sent over an insecure channel and must be encrypted at all costs!");
         }
 
