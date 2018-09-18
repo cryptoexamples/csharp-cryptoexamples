@@ -11,9 +11,6 @@ matrix:
 addons:
   sonarcloud:
     organization: "kmindi-github" # the key of the org you chose at step #3
-  branches:
-    - master
-    - sonarcloud-config
 
 before_script:
   - export PATH="$PATH:$HOME/.dotnet/tools"
