@@ -1,15 +1,14 @@
-﻿using System;
-using System.IO;
+﻿using Serilog;
+using System;
 using System.Security.Cryptography;
 
 namespace com.cryptoexamples.csharp
 {
     public class ExampleAsymetricStringEncryption
     {
-        public static StringWriter LOGGER = new StringWriter();
-
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateAsymetricStringEncryption("Text that is going to be sent over an insecure channel and must be encrypted at all costs!");
         }
 
@@ -26,7 +25,7 @@ namespace com.cryptoexamples.csharp
             //Decrypt
             decryptedString = System.Text.Encoding.UTF8.GetString(RSA.Decrypt(encryptedData, false));
 
-            Console.Write("Decrypted and original plain text are the same: {0}", decryptedString.Equals(plainText));
+            Log.Information("Decrypted and original plain text are the same: {0}", decryptedString.Equals(plainText));
 
             return decryptedString;
         }

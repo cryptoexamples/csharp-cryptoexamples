@@ -1,17 +1,16 @@
 ﻿using System;
 using System.Security.Cryptography;
-using System.Runtime.InteropServices;
 using System.IO;
+using Serilog;
 
 namespace com.cryptoexamples.csharp
 {
     public class ExampleFileEncryption
     {
-        public static StringWriter LOGGER = new StringWriter();
-
         public static void Main(string[] args)
         {
-            LOGGER.Write(DemonstrateFileEncryption("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.", "ThePasswordToDecryptAndEncryptTheFile"));
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            Log.Information(DemonstrateFileEncryption("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.", "ThePasswordToDecryptAndEncryptTheFile"));
         }
 
         public static String DemonstrateFileEncryption(String plainText, string password)
@@ -35,10 +34,12 @@ namespace com.cryptoexamples.csharp
             byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
 
             //Set Rijndael symmetric encryption algorithm
-            RijndaelManaged AES = new RijndaelManaged();
-            AES.KeySize = 256;
-            AES.BlockSize = 128;
-            AES.Padding = PaddingMode.PKCS7;
+            RijndaelManaged AES = new RijndaelManaged
+            {
+                KeySize = 256,
+                BlockSize = 128,
+                Padding = PaddingMode.PKCS7
+            };
 
             var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
             AES.Key = key.GetBytes(AES.KeySize / 8);
@@ -58,7 +59,7 @@ namespace com.cryptoexamples.csharp
                     }
                     catch (Exception ex)
                     {
-                        Console.WriteLine("Error: " + ex.Message);
+                        Log.Error(ex.Message);
                     }
                 }
             }
@@ -81,7 +82,7 @@ namespace com.cryptoexamples.csharp
                         }
                         catch (CryptographicException e)
                         {
-                            Console.WriteLine(e.Message);
+                            Log.Error(e.Message);
                         }
                     }
                 }

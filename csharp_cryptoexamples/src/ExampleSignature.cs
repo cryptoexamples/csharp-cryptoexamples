@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Security.Cryptography;
 using System.Text;
-using System.IO;
+using Serilog;
 
 namespace com.cryptoexamples.csharp
 {
     public class ExampleSigning
     {
-        public static StringWriter LOGGER = new StringWriter();
-
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateSigning("Text that should be signed to prevent unknown tampering with its content.");
         }
 
@@ -37,13 +36,13 @@ namespace com.cryptoexamples.csharp
                 // Verify the data and display the result to the console
                 if (RSAalg.VerifyData(originalData, new SHA1CryptoServiceProvider(), signedData))
                 {
-                    Console.Write("The data was verified.");
+                    Log.Information("The data was verified.");
                     return true;
                 }
             }
             catch (CryptographicException e)
             {
-                Console.Write(e.Message);
+                Log.Error(e.Message);
             }
             return false;
         }

@@ -1,16 +1,15 @@
-﻿using System;
+﻿using Serilog;
+using System;
 using System.IO;
 using System.Security.Cryptography;
-using System.Text;
 
 namespace com.cryptoexamples.csharp
 {
     public class ExampleStringEncryptionPasswordBased
     {
-        public static StringWriter LOGGER = new StringWriter();
-
         public static void Main(string[] args)
         {
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateStringEncryptionPasswordBased("Text that is going to be sent over an insecure channel and must be encrypted at all costs!", "SuperSafe");
         }
 
@@ -69,11 +68,11 @@ namespace com.cryptoexamples.csharp
                 }
 
                 //Display the original data and the decrypted data.
-                Console.Write("They are the same: {0}", plainText.Equals(decryptedCipherText));
+                Log.Information("They are the same: {0}", plainText.Equals(decryptedCipherText));
             }
             catch (Exception e)
             {
-                Console.WriteLine("Error: {0}", e.Message);
+                Log.Error("Error: {0}", e.Message);
             }
 
             return decryptedCipherText;
