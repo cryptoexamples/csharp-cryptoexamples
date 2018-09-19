@@ -5,9 +5,9 @@ using Serilog;
 
 namespace com.cryptoexamples.csharp
 {
-    public class ExampleFileEncryption
+    public static class ExampleFileEncryption
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             Log.Information(DemonstrateFileEncryption("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.", "ThePasswordToDecryptAndEncryptTheFile"));
@@ -72,9 +72,9 @@ namespace com.cryptoexamples.csharp
             {
                 fsCrypt.Read(salt, 0, salt.Length);
 
-                using (CryptoStream cs = new CryptoStream(fsCrypt, AES.CreateDecryptor(), CryptoStreamMode.Read))
+                using (CryptoStream cs2 = new CryptoStream(fsCrypt, AES.CreateDecryptor(), CryptoStreamMode.Read))
                 {
-                    using (StreamReader fsOut = new StreamReader(cs))
+                    using (StreamReader fsOut = new StreamReader(cs2))
                     {
                         try
                         {

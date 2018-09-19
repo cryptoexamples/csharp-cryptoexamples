@@ -5,9 +5,9 @@ using Serilog;
 
 namespace com.cryptoexamples.csharp
 {
-    public class ExampleSigning
+    public static class ExampleSigning
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateSigning("Text that should be signed to prevent unknown tampering with its content.");

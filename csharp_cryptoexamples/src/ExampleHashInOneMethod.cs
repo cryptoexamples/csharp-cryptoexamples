@@ -4,9 +4,9 @@ using System.Text;
 
 namespace com.cryptoexamples.csharp
 {
-    public class ExampleHashing
+    public static class ExampleHashing
     {
-        public static void Main(string[] args)
+        public static void Main()
         {
             DemonstrateHashing("Text that should be authenticated by comparing the hash of it!");
         }

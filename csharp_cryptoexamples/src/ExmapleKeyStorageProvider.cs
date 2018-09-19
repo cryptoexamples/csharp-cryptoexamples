@@ -3,7 +3,7 @@ using System.Security.Cryptography;
 
 namespace csharp_cryptoexamples.src
 {
-    public class ExmapleKeyStorageProvider
+    public static class ExmapleKeyStorageProvider
     {
         public static void Main()
         {

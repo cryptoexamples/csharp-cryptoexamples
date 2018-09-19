@@ -23,7 +23,7 @@ namespace XUnitTestProject1
         public void AsymmetricStringEncryptionTest()
         {
             Refresh();
-            ExampleAsymetricStringEncryption.Main(null);
+            ExampleAsymetricStringEncryption.Main();
             Assert.Contains("Decrypted and original plain text are the same: True", outMessage.ToString());
         }
 
@@ -32,7 +32,7 @@ namespace XUnitTestProject1
         {
             Refresh();
             // Basic test if encryption and decryption is working.
-            ExampleStringEncryptionPasswordBased.Main(null);
+            ExampleStringEncryptionPasswordBased.Main();
             Assert.Contains("They are the same: True", outMessage.ToString());
         }
 
@@ -40,7 +40,7 @@ namespace XUnitTestProject1
         public void FileEncryptionTest()
         {
             Refresh();
-            ExampleFileEncryption.Main(null);
+            ExampleFileEncryption.Main();
             Assert.Contains(plainText, outMessage.ToString());
         }
 
@@ -54,7 +54,7 @@ namespace XUnitTestProject1
         public void SigningTest()
         {
             Refresh();
-            ExampleSigning.Main(null);
+            ExampleSigning.Main();
             Assert.Contains("The data was verified.", outMessage.ToString());
         }
 
@@ -63,7 +63,7 @@ namespace XUnitTestProject1
         {
             Refresh();
             // Basic test if encryption and decryption is working.
-            ExampleStringEncryptionKeyBasedInOneMethod.Main(null);
+            ExampleStringEncryptionKeyBasedInOneMethod.Main();
             Assert.Contains("They are the same: True", outMessage.ToString());
         }
 
