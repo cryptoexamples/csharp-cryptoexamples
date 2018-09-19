@@ -23,7 +23,7 @@ namespace com.cryptoexamples.csharp
                 {
                     //----------------------------Encrypt----------------------------
                     //If no password is provided througth the user, use the generated key from the AesManaged class.
-                    if (password != null && password.Length != 0)
+                    if (!string.IsNullOrEmpty(password))
                     {
                         //Generating random salt
                         byte[] salt = new byte[32];

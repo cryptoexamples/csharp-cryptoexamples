@@ -5,7 +5,7 @@ using Serilog;
 
 namespace com.cryptoexamples.csharp
 {
-    public static class ExampleSigning
+    public static class ExampleSignature
     {
         public static void Main()
         {

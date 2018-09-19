@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Security.Cryptography;
+using Serilog;
 
 namespace csharp_cryptoexamples.src
 {
@@ -7,6 +8,7 @@ namespace csharp_cryptoexamples.src
     {
         public static void Main()
         {
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateKeyStorage("MyKeyContainerName");
         }
 
@@ -29,10 +31,18 @@ namespace csharp_cryptoexamples.src
                 KeyContainerName = ContainerName
             };
 
-            // Create a new instance of RSACryptoServiceProvider that accesses  
-            // the key container MyKeyContainerName.  
-            RSACryptoServiceProvider rsa2 = new RSACryptoServiceProvider(getParametersFromKSP);
+            RSACryptoServiceProvider rsa2 = null;
 
+            try
+            {
+                // Create a new instance of RSACryptoServiceProvider that accesses  
+                // the key container MyKeyContainerName.  
+                rsa2 = new RSACryptoServiceProvider(getParametersFromKSP);
+            }
+            catch (Exception e)
+            {
+                Log.Error(e.Message);
+            }
             return rsa2;
         }
     }

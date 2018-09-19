@@ -34,6 +34,8 @@ namespace XUnitTestProject1
             // Basic test if encryption and decryption is working.
             ExampleStringEncryptionPasswordBased.Main();
             Assert.Contains("They are the same: True", outMessage.ToString());
+            ExampleStringEncryptionPasswordBased.DemonstrateStringEncryptionPasswordBased(null, null);
+            Assert.Contains("Error", outMessage.ToString());
         }
 
         [Fact]
@@ -54,7 +56,7 @@ namespace XUnitTestProject1
         public void SigningTest()
         {
             Refresh();
-            ExampleSigning.Main();
+            ExampleSignature.Main();
             Assert.Contains("The data was verified.", outMessage.ToString());
         }
 
@@ -63,7 +65,7 @@ namespace XUnitTestProject1
         {
             Refresh();
             // Basic test if encryption and decryption is working.
-            ExampleStringEncryptionKeyBasedInOneMethod.Main();
+            ExampleStringEncryptionKeyBased.Main();
             Assert.Contains("They are the same: True", outMessage.ToString());
         }
 

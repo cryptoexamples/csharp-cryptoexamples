@@ -5,7 +5,7 @@ using System.Security.Cryptography;
 
 namespace com.cryptoexamples.csharp
 {
-    public static class ExampleStringEncryptionKeyBasedInOneMethod
+    public static class ExampleStringEncryptionKeyBased
     {
         public static void Main()
         {
