@@ -15,7 +15,7 @@ addons:
 before_script:
   - export PATH="$PATH:$HOME/.dotnet/tools"
 script:
-  - dotnet sonarscanner begin /k:"csharp-cryptoexamples" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$SONAR_TOKEN" /d:sonar.language="cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*" /d:sonar.cs.opencover.reportsPaths="lcov.opencover.xml" || true
+  - dotnet sonarscanner begin /k:"csharp-cryptoexamples" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login="$SONAR_TOKEN" /d:sonar.language="cs" /d:sonar.exclusions="**/bin/**/*,**/obj/**/*, **/src/ExmapleKeyStorageProvider.cs" /d:sonar.cs.opencover.reportsPaths="lcov.opencover.xml" || true
   - dotnet build csharp_cryptoexamples.sln
   - dotnet test ./csharp_cryptoexamplesTest/csharp_cryptoexamplesTest.csproj /p:CollectCoverage=true /p:CoverletOutputFormat=opencover /p:CoverletOutput=../lcov
   - dotnet sonarscanner end /d:sonar.login="$SONAR_TOKEN" || true
