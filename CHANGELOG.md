@@ -19,6 +19,18 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 - added Hashing
 - added testing
 
+## [0.1.1] - 2018-09-25
+
+### Changed
+
+- Some changes of the structure to remove some code smells in SonarCloud.
+- Update packages.
+
+### Fixed
+
+- Travis is now working
+- SonarCloud is now working
+
 ## [0.1.0] - 2018-09-06
 
 ### Added
