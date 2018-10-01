@@ -7,18 +7,6 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 ## [Unreleased]
 
-### Added
-
-- added Changelog
-- added Asymmetric Encryption
-- added Signature
-- added Key Storage
-- added Symmetric key based String Encryption
-- added Symmetric password based String Encryption
-- added Symmetric File Encryption
-- added Hashing
-- added testing
-
 ## [0.1.1] - 2018-09-25
 
 ### Changed
