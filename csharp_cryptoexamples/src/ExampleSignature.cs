@@ -28,13 +28,13 @@ namespace com.cryptoexamples.csharp
                 // and automatically create a new key-pair.
                 RSACryptoServiceProvider RSAalg = new RSACryptoServiceProvider();
 
-                // Hash and sign the data. Pass a new instance of SHA1CryptoServiceProvider
-                // to specify the use of SHA1 for hashing.
+                // Hash and sign the data. Pass a new instance of SHA256CryptoServiceProvider
+                // to specify the use of SHA256 for hashing.
                 // Hash and sign the data.
-                signedData = RSAalg.SignData(originalData, new SHA1CryptoServiceProvider());
+                signedData = RSAalg.SignData(originalData, new SHA256CryptoServiceProvider());
 
                 // Verify the data and display the result to the console
-                if (RSAalg.VerifyData(originalData, new SHA1CryptoServiceProvider(), signedData))
+                if (RSAalg.VerifyData(originalData, new SHA256CryptoServiceProvider(), signedData))
                 {
                     Log.Information("The data was verified.");
                     return true;
