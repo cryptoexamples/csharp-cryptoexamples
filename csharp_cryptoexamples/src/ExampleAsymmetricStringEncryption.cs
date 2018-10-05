@@ -18,7 +18,7 @@ namespace com.cryptoexamples.csharp
 
             RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider
             {
-                KeySize = 512
+                KeySize = 4096
             };
 
             //----------------------------Encrypt----------------------------
