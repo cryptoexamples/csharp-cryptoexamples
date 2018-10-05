@@ -19,76 +19,56 @@ namespace com.cryptoexamples.csharp
 
             //Generating random salt
             byte[] salt = new byte[32];
-            using (RNGCryptoServiceProvider rng = new RNGCryptoServiceProvider())
-            {
-                for (int i = 0; i < 10; i++)
-                {
-                    // Fille the buffer with the generated data
-                    rng.GetBytes(salt);
-                }
-            }
+            // Fille the buffer with the generated data
+            new RNGCryptoServiceProvider().GetBytes(salt);
 
-            //Encryption
-
+            //----------------------------Encrypt----------------------------
             //convert password string to byte arrray
             byte[] passwordBytes = System.Text.Encoding.UTF8.GetBytes(password);
-
-            //Set Rijndael symmetric encryption algorithm
-            RijndaelManaged AES = new RijndaelManaged
+            //Set AES symmetric encryption algorithm
+            AesManaged aesManaged = new AesManaged
             {
                 KeySize = 256,
                 BlockSize = 128,
                 Padding = PaddingMode.PKCS7
             };
-
-            var key = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
-            AES.Key = key.GetBytes(AES.KeySize / 8);
-            AES.IV = key.GetBytes(AES.BlockSize / 8);
-            AES.Mode = CipherMode.CBC;
+            //Derive bytes for the password with PBKDF2.
+            Rfc2898DeriveBytes rfc2898DeriveBytes = new Rfc2898DeriveBytes(passwordBytes, salt, 50000);
+            aesManaged.Key = rfc2898DeriveBytes.GetBytes(aesManaged.KeySize / 8);
+            aesManaged.IV = rfc2898DeriveBytes.GetBytes(aesManaged.BlockSize / 8);
+            aesManaged.Mode = CipherMode.ECB; //TODO change CipherMode.
             //create output file name
-            using (FileStream fsCrypt = new FileStream(inputFile, FileMode.Create))
+            using (FileStream fileStream = new FileStream(inputFile, FileMode.Create))
             {
                 // write salt to the begining of the output file, so in this case can be random every time
-                fsCrypt.Write(salt, 0, salt.Length);
-                using (CryptoStream cs = new CryptoStream(fsCrypt, AES.CreateEncryptor(), CryptoStreamMode.Write))
+                fileStream.Write(salt, 0, salt.Length);
+                using (CryptoStream cryptoStream = new CryptoStream(fileStream, aesManaged.CreateEncryptor(), CryptoStreamMode.Write))
                 {
                     byte[] plaintextBytes = System.Text.Encoding.UTF8.GetBytes(plainText);
-                    try
-                    {
-                        cs.Write(plaintextBytes);
-                    }
-                    catch (Exception ex)
-                    {
-                        Log.Error(ex.Message);
-                    }
+                    cryptoStream.Write(plaintextBytes);
                 }
             }
 
-            //Decryption
+            //----------------------------Decrypt----------------------------
+            String decryptedString = "";
 
-            String decryptString = "";
-
-            using (FileStream fsCrypt = new FileStream(inputFile, FileMode.Open))
+            using (FileStream fileStream = new FileStream(inputFile, FileMode.Open))
             {
-                fsCrypt.Read(salt, 0, salt.Length);
-
-                using (CryptoStream cs2 = new CryptoStream(fsCrypt, AES.CreateDecryptor(), CryptoStreamMode.Read))
+                try
                 {
-                    using (StreamReader fsOut = new StreamReader(cs2))
+                    fileStream.Read(salt, 0, salt.Length);
+                    using (StreamReader streamReader = new StreamReader(new CryptoStream(fileStream, aesManaged.CreateDecryptor(), CryptoStreamMode.Read)))
                     {
-                        try
-                        {
-                            decryptString = fsOut.ReadToEnd();
-                        }
-                        catch (CryptographicException e)
-                        {
-                            Log.Error(e.Message);
-                        }
+                        decryptedString = streamReader.ReadToEnd();
                     }
                 }
+                catch (ArgumentException e)
+                {
+                    Log.Error("Error: {0}", e.Message);
+                }
             }
-
-            return decryptString;
+            Log.Information("Decrypted file content and original plain text are the same: {0}", plainText.Equals(decryptedString));
+            return decryptedString;
         }
     }
 }

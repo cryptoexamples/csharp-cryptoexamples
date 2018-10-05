@@ -18,7 +18,7 @@ namespace csharp_cryptoexamples.src
 
             // Create the CspParameters object and set the key container
             // name used to store the RSA key pair.
-            CspParameters cp = new CspParameters
+            CspParameters cspParameters = new CspParameters
             {
                 KeyContainerName = ContainerName
             };
@@ -26,7 +26,7 @@ namespace csharp_cryptoexamples.src
             //---- Get Parameter from KSP -------------------------
 
             // If the key is allways in use, the CspParamters will set to the safed one.
-            CspParameters getParametersFromKSP = new CspParameters
+            CspParameters cspParametersFromKSP = new CspParameters
             {
                 KeyContainerName = ContainerName
             };
@@ -37,12 +37,14 @@ namespace csharp_cryptoexamples.src
             {
                 // Create a new instance of RSACryptoServiceProvider that accesses  
                 // the key container MyKeyContainerName.  
-                rsa2 = new RSACryptoServiceProvider(getParametersFromKSP);
+                rsa2 = new RSACryptoServiceProvider(cspParametersFromKSP);
             }
-            catch (Exception e)
+            catch (CryptographicException e)
             {
-                Log.Error(e.Message);
+                Log.Error("Error: {0}", e.Message);
+                return null;
             }
+            Log.Information("The password before and after keystorage are the same: {0}", cspParameters.KeyPassword.Equals(cspParametersFromKSP.KeyPassword));
             return rsa2;
         }
     }

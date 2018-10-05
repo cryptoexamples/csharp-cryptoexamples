@@ -14,16 +14,20 @@ namespace com.cryptoexamples.csharp
 
         public static String DemonstrateAsymetricStringEncryption(String plainText)
         {
-            byte[] dataToEncrypt = System.Text.Encoding.UTF8.GetBytes(plainText);
-            byte[] encryptedData;
-            String decryptedString;
+            byte[] dataForEncryption = System.Text.Encoding.UTF8.GetBytes(plainText);
 
-            RSACryptoServiceProvider RSA = new RSACryptoServiceProvider();
+            RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider
+            {
+                KeySize = 512
+            };
 
-            //Encrypt
-            encryptedData = RSA.Encrypt(dataToEncrypt, false);
-            //Decrypt
-            decryptedString = System.Text.Encoding.UTF8.GetString(RSA.Decrypt(encryptedData, false));
+            //----------------------------Encrypt----------------------------
+            byte[] encryptedData = rSACryptoServiceProvider.Encrypt(dataForEncryption, false);
+            String encryptedString = Convert.ToBase64String(encryptedData);
+
+            //----------------------------Decrypt----------------------------
+            byte[] decryptedData = Convert.FromBase64String(encryptedString);
+            String decryptedString = System.Text.Encoding.UTF8.GetString(rSACryptoServiceProvider.Decrypt(decryptedData, false));
 
             Log.Information("Decrypted and original plain text are the same: {0}", decryptedString.Equals(plainText));
 

@@ -33,7 +33,8 @@ namespace XUnitTestProject1
             Refresh();
             // Basic test if encryption and decryption is working.
             ExampleStringEncryptionPasswordBased.Main();
-            Assert.Contains("They are the same: True", outMessage.ToString());
+            Assert.Contains("Decrypted and original plain text are the same: True", outMessage.ToString());
+            //Catch coverage
             ExampleStringEncryptionPasswordBased.DemonstrateStringEncryptionPasswordBased(null, null);
             Assert.Contains("Error", outMessage.ToString());
         }
@@ -49,7 +50,7 @@ namespace XUnitTestProject1
         [Fact]
         public void HashingTest()
         {
-            Assert.Equal("113F62C2E4F3F1CB4AE0A561914C895D75D00407E6B35AB7AF0595C136AF5604", ExampleHashing.DemonstrateHashing("Text that should be authenticated by comparing the hash of it!"));
+            Assert.Equal("zKraFpvgc9ZRcQ1TjFwBMhVWImeHRI4qfr0DyDbYgPw=", ExampleHashing.DemonstrateHashing("Text that should be authenticated by comparing the hash of it"));
         }
 
         [Fact]
@@ -57,7 +58,7 @@ namespace XUnitTestProject1
         {
             Refresh();
             ExampleSignature.Main();
-            Assert.Contains("The data was verified.", outMessage.ToString());
+            Assert.Contains("The data is verified.", outMessage.ToString());
         }
 
         [Fact]
@@ -66,7 +67,7 @@ namespace XUnitTestProject1
             Refresh();
             // Basic test if encryption and decryption is working.
             ExampleStringEncryptionKeyBased.Main();
-            Assert.Contains("They are the same: True", outMessage.ToString());
+            Assert.Contains("Decrypted and original plain text are the same: True", outMessage.ToString());
         }
 
         /*[Fact]

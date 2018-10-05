@@ -19,40 +19,37 @@ namespace com.cryptoexamples.csharp
             try
             {
                 // Create a new instance of the AesManaged class. This generates a new key and initialization vector (IV).
-                using (AesManaged myAes = new AesManaged())
+                using (AesManaged aesManaged = new AesManaged())
                 {
                     //----------------------------Encrypt----------------------------
-
+                    aesManaged.KeySize = 256;
                     // Contains the encrypted string as bytes.
                     byte[] cipherTextBytes;
-
                     // Create a encrytor to perform the stream transform.
-                    ICryptoTransform encryptor = myAes.CreateEncryptor(myAes.Key, myAes.IV);
+                    ICryptoTransform encryptor = aesManaged.CreateEncryptor(aesManaged.Key, aesManaged.IV);
 
                     // Create the streams used for encryption.
-                    using (MemoryStream msEncrypt = new MemoryStream())
+                    using (MemoryStream memoryStream = new MemoryStream())
                     {
-                        using (StreamWriter swEncrypt = new StreamWriter(new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write)))
+                        using (StreamWriter streamWriter = new StreamWriter(new CryptoStream(memoryStream, encryptor, CryptoStreamMode.Write)))
                         {
                             //Write all data to the stream.
-                            swEncrypt.Write(plainText);
+                            streamWriter.Write(plainText);
                         }
-                        cipherTextBytes = msEncrypt.ToArray();
+                        cipherTextBytes = memoryStream.ToArray();
                     }
 
                     //----------------------------Decrypt----------------------------
-
                     // Create a decrytor to perform the stream transform.
-                    ICryptoTransform decryptor = myAes.CreateDecryptor(myAes.Key, myAes.IV);
-
+                    ICryptoTransform decryptor = aesManaged.CreateDecryptor(aesManaged.Key, aesManaged.IV);
                     // Read the decrypted bytes from the decrypting stream and place them in a string.
                     decryptedCipherText = new StreamReader(new CryptoStream(new MemoryStream(cipherTextBytes), decryptor, CryptoStreamMode.Read)).ReadToEnd();
                 }
 
                 //Display the original data and the decrypted data.
-                Log.Information("They are the same: {0}", plainText.Equals(decryptedCipherText));
+                Log.Information("Decrypted and original plain text are the same: {0}", plainText.Equals(decryptedCipherText));
             }
-            catch (Exception e)
+            catch (CryptographicException e)
             {
                 Log.Error("Error: {0}", e.Message);
             }

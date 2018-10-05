@@ -18,31 +18,27 @@ namespace com.cryptoexamples.csharp
             try
             {
                 // Create a UnicodeEncoder to convert between byte array and string.
-                UTF8Encoding ByteConverter = new UTF8Encoding();
-
+                UTF8Encoding uTF8Encoding = new UTF8Encoding();
                 // Create byte arrays to hold original, encrypted, and decrypted data.
-                byte[] originalData = ByteConverter.GetBytes(plainText);
-                byte[] signedData;
-
+                byte[] originalData = uTF8Encoding.GetBytes(plainText);
                 // Create a new instance of the RSACryptoServiceProvider class 
                 // and automatically create a new key-pair.
-                RSACryptoServiceProvider RSAalg = new RSACryptoServiceProvider();
-
+                RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider();
                 // Hash and sign the data. Pass a new instance of SHA256CryptoServiceProvider
                 // to specify the use of SHA256 for hashing.
                 // Hash and sign the data.
-                signedData = RSAalg.SignData(originalData, new SHA256CryptoServiceProvider());
-
-                // Verify the data and display the result to the console
-                if (RSAalg.VerifyData(originalData, new SHA256CryptoServiceProvider(), signedData))
+                byte[] signedData = rSACryptoServiceProvider.SignData(originalData, new SHA256CryptoServiceProvider());
+                // Verify the data.
+                if (rSACryptoServiceProvider.VerifyData(originalData, new SHA256CryptoServiceProvider(), signedData))
                 {
-                    Log.Information("The data was verified.");
+                    Log.Information("The data is verified.");
                     return true;
                 }
+                else { Log.Information("The data is not verified."); }
             }
             catch (CryptographicException e)
             {
-                Log.Error(e.Message);
+                Log.Error("Error: {0}", e.Message);
             }
             return false;
         }
