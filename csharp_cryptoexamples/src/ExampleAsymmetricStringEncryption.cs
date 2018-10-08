@@ -19,7 +19,7 @@ namespace com.cryptoexamples.csharp
             DemonstrateAsymetricStringEncryption("Text that is going to be sent over an insecure channel and must be encrypted at all costs!");
         }
 
-        public static string DemonstrateAsymetricStringEncryption(String plainText)
+        public static string DemonstrateAsymetricStringEncryption(string plainText)
         {
             //Contains the binary representation of the string that should be encrypted.
             byte[] dataForEncryption = System.Text.Encoding.UTF8.GetBytes(plainText);

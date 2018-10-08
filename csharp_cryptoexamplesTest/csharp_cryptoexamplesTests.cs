@@ -35,6 +35,7 @@ namespace XUnitTestProject1
             ExampleStringEncryptionPasswordBased.Main();
             Assert.Contains("Decrypted and original plain text are the same: True", outMessage.ToString());
             //Catch coverage
+            Refresh();
             ExampleStringEncryptionPasswordBased.DemonstrateStringEncryptionPasswordBased(null, null);
             Assert.Contains("Error", outMessage.ToString());
         }
@@ -50,7 +51,7 @@ namespace XUnitTestProject1
         [Fact]
         public void HashingTest()
         {
-            Assert.Equal("zKraFpvgc9ZRcQ1TjFwBMhVWImeHRI4qfr0DyDbYgPw=", ExampleHashing.DemonstrateHashing("Text that should be authenticated by comparing the hash of it"));
+            Assert.Equal("jg0X629+SmdP0/LTHZV/3zXBrizM3/hptRZVIuTXSCtyaqAe0NB8KMld2qebBIXFS1yowCUpCPu93l/fPmKEXg", ExampleHashing.DemonstrateHashing("Text that should be authenticated by comparing the hash of it!"));
         }
 
         [Fact]
@@ -73,10 +74,10 @@ namespace XUnitTestProject1
         /*[Fact]
         public void KeyStorageProviderTest()
         {
-            String ContainerName = "MyContainer";
+            string ContainerName = "MyContainer";
             byte[] dataToEncrypt = Encoding.UTF8.GetBytes(plainText2);
             byte[] encryptedData;
-            String decryptedString;
+            string decryptedString;
 
             CspParameters cp = new CspParameters
             {

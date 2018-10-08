@@ -12,6 +12,15 @@ using System.Text;
 
 namespace com.cryptoexamples.csharp
 {
+    /// <summary>
+    /// Example for encryption and decryption of a file in one method.
+    /// <para>- PKCS#5 Password-Based Cryptography Specification V2.0</para>
+    /// <para>- Random salt generation</para>
+    /// <para>- Payload for the authentification</para>
+    /// <para>- AES-256 authenticated encryption using GCM</para>
+    /// <para>- BASE64-encoding as representation for the byte-arrays</para>
+    /// For more information about the used cryptosystem look at: <see href="https://en.wikipedia.org/wiki/Advanced_Encryption_Standard" />
+    /// </summary>
     public static class ExampleFileEncryption
     {
         private static readonly SecureRandom Random = new SecureRandom();
@@ -23,7 +32,8 @@ namespace com.cryptoexamples.csharp
         //Preconfigured Password Key Derivation Parameters
         public static readonly int SaltBitSize = 128;
         public static readonly int Iterations = 10000;
-
+        
+        //The path and filename of the encrypted file.
         public static readonly string inputFile = @"encryptedFile.enc";
 
         public static void Main()
@@ -32,110 +42,107 @@ namespace com.cryptoexamples.csharp
             Log.Information(DemonstrateFileEncryption("Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.", "ThePasswordToDecryptAndEncryptTheFile"));
         }
 
-        public static String DemonstrateFileEncryption(String plainText, String password, byte[] nonSecretPayload = null, int nonSecretPayloadLength = 0)
+        public static string DemonstrateFileEncryption(string plainText, string password, byte[] nonSecretPayload = null, int nonSecretPayloadLength = 0)
         {
             //----------------------------Encrypt----------------------------
 
-
-            byte[] secretMessage = Encoding.UTF8.GetBytes(plainText);
+            //Contains the binary representation of the string that should be encrypted.
+            byte[] dataForEncryption = Encoding.UTF8.GetBytes(plainText);
+            //If the default value for nonSecretPayload is used, initialize it.
             nonSecretPayload = nonSecretPayload ?? new byte[] { };
+            //Create PKCS#5-Parameters.
+            Pkcs5S2ParametersGenerator pkcs5S2ParametersGenerator = new Pkcs5S2ParametersGenerator();
 
-            var generator = new Pkcs5S2ParametersGenerator();
-
-            //Use Random Salt to minimize pre-generated weak password attacks.
-            var salt = new byte[SaltBitSize / 8];
+            //Initialize random salt.
+            byte[] salt = new byte[SaltBitSize / 8];
             Random.NextBytes(salt);
 
-            generator.Init(
-                PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()),
-                salt,
-                Iterations);
+            pkcs5S2ParametersGenerator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()), salt, Iterations);
 
-            //Generate Key
-            var key = (KeyParameter)generator.GenerateDerivedMacParameters(KeyBitSize);
+            //Generate key.
+            KeyParameter key = (KeyParameter)pkcs5S2ParametersGenerator.GenerateDerivedMacParameters(KeyBitSize);
 
-            //Create Full Non Secret Payload
-            var payload = new byte[salt.Length + nonSecretPayload.Length];
+            //Create payload.
+            byte[] payload = new byte[salt.Length + nonSecretPayload.Length];
             Array.Copy(nonSecretPayload, payload, nonSecretPayload.Length);
             Array.Copy(salt, 0, payload, nonSecretPayload.Length, salt.Length);
 
-            nonSecretPayload = payload;
-            //Using random nonce large enough not to repeat
-            var nonce = new byte[NonceBitSize / 8];
+            //Using random nonce.
+            byte[] nonce = new byte[NonceBitSize / 8];
             Random.NextBytes(nonce, 0, nonce.Length);
+            //Generate GCM block cipher and AEAD-Parameters.
+            GcmBlockCipher gcmBlockCipher = new GcmBlockCipher(new AesEngine());
+            AeadParameters aeadParameters = new AeadParameters(new KeyParameter(key.GetKey()), MacBitSize, nonce, payload);
+            gcmBlockCipher.Init(true, aeadParameters);
 
-            var cipher = new GcmBlockCipher(new AesEngine());
-            var parameters = new AeadParameters(new KeyParameter(key.GetKey()), MacBitSize, nonce, nonSecretPayload);
-            cipher.Init(true, parameters);
-
-            //Generate Cipher Text With Auth Tag
-            var cipherText = new byte[cipher.GetOutputSize(secretMessage.Length)];
-            var len = cipher.ProcessBytes(secretMessage, 0, secretMessage.Length, cipherText, 0);
-            cipher.DoFinal(cipherText, len);
+            //Generate ciphertext with authentication tag.
+            byte[] cipherTextAsByteArray = new byte[gcmBlockCipher.GetOutputSize(dataForEncryption.Length)];
+            int length = gcmBlockCipher.ProcessBytes(dataForEncryption, 0, dataForEncryption.Length, cipherTextAsByteArray, 0);
+            gcmBlockCipher.DoFinal(cipherTextAsByteArray, length);
             byte[] output = null;
-            //Assemble Message
-            using (var combinedStream = new MemoryStream())
+            //Put the pices of the message together.
+            using (MemoryStream memoryStream = new MemoryStream())
             {
-                using (var binaryWriter = new BinaryWriter(combinedStream))
+                using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
                 {
-                    //Prepend Authenticated Payload
-                    binaryWriter.Write(nonSecretPayload);
-                    //Prepend Nonce
+                    //Add authenticated payload (payload = nonSecretPayload + salt).
+                    binaryWriter.Write(payload);
+                    //Add nonce.
                     binaryWriter.Write(nonce);
-                    //Write Cipher Text
-                    binaryWriter.Write(cipherText);
+                    //Add ciphertext.
+                    binaryWriter.Write(cipherTextAsByteArray);
                 }
-                output = combinedStream.ToArray();
+                output = memoryStream.ToArray();
             }
+            //Write the output to the file.
             File.WriteAllBytes(inputFile, output);
 
 
             //----------------------------Decrypt----------------------------
 
+            //Read the encrypted file.
+            byte[] encryptedMessageAsByteArray = File.ReadAllBytes(inputFile);
+            //Create PKCS#5-Parameters.
+            pkcs5S2ParametersGenerator = new Pkcs5S2ParametersGenerator();
 
-            var encryptedMessage = File.ReadAllBytes(inputFile);
-            generator = new Pkcs5S2ParametersGenerator();
-
-            //Grab Salt from Payload
+            //Get salt from payload.
             salt = new byte[SaltBitSize / 8];
-            Array.Copy(encryptedMessage, nonSecretPayloadLength, salt, 0, salt.Length);
+            Array.Copy(encryptedMessageAsByteArray, nonSecretPayloadLength, salt, 0, salt.Length);
 
-            generator.Init(
-                PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()),
-                salt,
-                Iterations);
+            pkcs5S2ParametersGenerator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()), salt, Iterations);
 
-            //Generate Key
-            key = (KeyParameter)generator.GenerateDerivedMacParameters(KeyBitSize);
-
+            //Generate key.
+            key = (KeyParameter)pkcs5S2ParametersGenerator.GenerateDerivedMacParameters(KeyBitSize);
+            //Calculate the size of the payload length.
             nonSecretPayloadLength += salt.Length;
 
-            using (var cipherStream = new MemoryStream(encryptedMessage))
-            using (var cipherReader = new BinaryReader(cipherStream))
+            using (MemoryStream memoryStream = new MemoryStream(encryptedMessageAsByteArray))
+            using (BinaryReader binaryReader = new BinaryReader(memoryStream))
             {
-                //Grab Payload
-                nonSecretPayload = cipherReader.ReadBytes(nonSecretPayloadLength);
+                //Get the payload (nonSecretPayload + salt).
+                payload = binaryReader.ReadBytes(nonSecretPayloadLength);
 
-                //Grab Nonce
-                nonce = cipherReader.ReadBytes(NonceBitSize / 8);
+                //Get nonce.
+                nonce = binaryReader.ReadBytes(NonceBitSize / 8);
+                //Generate GCM block cipher and AEAD-Parameters.
+                gcmBlockCipher = new GcmBlockCipher(new AesEngine());
+                aeadParameters = new AeadParameters(new KeyParameter(key.GetKey()), MacBitSize, nonce, payload);
+                gcmBlockCipher.Init(false, aeadParameters);
 
-                cipher = new GcmBlockCipher(new AesEngine());
-                parameters = new AeadParameters(new KeyParameter(key.GetKey()), MacBitSize, nonce, nonSecretPayload);
-                cipher.Init(false, parameters);
-
-                //Decrypt Cipher Text
-                cipherText = cipherReader.ReadBytes(encryptedMessage.Length - nonSecretPayloadLength - nonce.Length);
-                byte[] decryptedTextAsByteArray = new byte[cipher.GetOutputSize(cipherText.Length)];
+                //Decrypt ciphertext.
+                cipherTextAsByteArray = binaryReader.ReadBytes(encryptedMessageAsByteArray.Length - nonSecretPayloadLength - nonce.Length);
+                byte[] decryptedTextAsByteArray = new byte[gcmBlockCipher.GetOutputSize(cipherTextAsByteArray.Length)];
 
                 try
                 {
-                    len = cipher.ProcessBytes(cipherText, 0, cipherText.Length, decryptedTextAsByteArray, 0);
-                    cipher.DoFinal(decryptedTextAsByteArray, len);
+                    //Authentication check.
+                    length = gcmBlockCipher.ProcessBytes(cipherTextAsByteArray, 0, cipherTextAsByteArray.Length, decryptedTextAsByteArray, 0);
+                    gcmBlockCipher.DoFinal(decryptedTextAsByteArray, length);
 
                 }
                 catch (InvalidCipherTextException e)
                 {
-                    //Return null if it doesn't authenticate
+                    //Return null if it doesn't authenticate.
                     Log.Error("Error: {0}", e.Message);
                     return null;
                 }

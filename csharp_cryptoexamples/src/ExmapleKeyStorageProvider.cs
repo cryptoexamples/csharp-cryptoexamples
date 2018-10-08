@@ -12,7 +12,7 @@ namespace csharp_cryptoexamples.src
             DemonstrateKeyStorage("MyKeyContainerName");
         }
 
-        public static RSACryptoServiceProvider DemonstrateKeyStorage(String ContainerName)
+        public static RSACryptoServiceProvider DemonstrateKeyStorage(string ContainerName)
         {
             //---- Fill Parameter in KSP ---------
 
@@ -31,13 +31,13 @@ namespace csharp_cryptoexamples.src
                 KeyContainerName = ContainerName
             };
 
-            RSACryptoServiceProvider rsa2 = null;
+            RSACryptoServiceProvider rSACryptoServiceProvider = null;
 
             try
             {
                 // Create a new instance of RSACryptoServiceProvider that accesses  
                 // the key container MyKeyContainerName.  
-                rsa2 = new RSACryptoServiceProvider(cspParametersFromKSP);
+                rSACryptoServiceProvider = new RSACryptoServiceProvider(cspParametersFromKSP);
             }
             catch (CryptographicException e)
             {
@@ -45,7 +45,7 @@ namespace csharp_cryptoexamples.src
                 return null;
             }
             Log.Information("The password before and after keystorage are the same: {0}", cspParameters.KeyPassword.Equals(cspParametersFromKSP.KeyPassword));
-            return rsa2;
+            return rSACryptoServiceProvider;
         }
     }
 }

@@ -5,6 +5,13 @@ using Serilog;
 
 namespace com.cryptoexamples.csharp
 {
+    /// <summary>
+    /// Example for cryptographic signing of a string in one method.
+    /// <para>- Generation of public and private RSA 4096 bit keypair</para>
+    /// <para>- SHA-512 with RSA</para>
+    /// <para>- UTF-8 encoding of Strings</para>
+    /// For more information about the used cryptosystem look at: <see href="https://en.wikipedia.org/wiki/RSA_(cryptosystem)" />
+    /// </summary>
     public static class ExampleSignature
     {
         public static void Main()
@@ -12,24 +19,32 @@ namespace com.cryptoexamples.csharp
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateSigning("Text that should be signed to prevent unknown tampering with its content.");
         }
-
-        public static Boolean DemonstrateSigning(String plainText)
+        
+        public static bool DemonstrateSigning(string plainText)
         {
             try
             {
-                // Create a UnicodeEncoder to convert between byte array and string.
-                UTF8Encoding uTF8Encoding = new UTF8Encoding();
-                // Create byte arrays to hold original, encrypted, and decrypted data.
-                byte[] originalData = uTF8Encoding.GetBytes(plainText);
-                // Create a new instance of the RSACryptoServiceProvider class 
-                // and automatically create a new key-pair.
-                RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider();
-                // Hash and sign the data. Pass a new instance of SHA256CryptoServiceProvider
-                // to specify the use of SHA256 for hashing.
-                // Hash and sign the data.
-                byte[] signedData = rSACryptoServiceProvider.SignData(originalData, new SHA256CryptoServiceProvider());
-                // Verify the data.
-                if (rSACryptoServiceProvider.VerifyData(originalData, new SHA256CryptoServiceProvider(), signedData))
+                //----------------------------Signing---------------------------------
+
+                //Convert the plaintext to there utf-8 byte representation.
+                byte[] originalData = Encoding.UTF8.GetBytes(plainText);
+                //Generate a new key-pair.
+                RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider
+                {
+                    KeySize = 4096
+                };
+                //Hash and sign the data with SHA-512.
+                byte[] signedData = rSACryptoServiceProvider.SignData(originalData, new SHA512CryptoServiceProvider());
+                //Convert the signed data to a representative string.
+                string signature = Convert.ToBase64String(signedData);
+
+
+                //----------------------------Verification----------------------------
+
+                //Convert the signature to the base64 byte representation.
+                signedData = Convert.FromBase64String(signature);
+                //Verify the data.
+                if (rSACryptoServiceProvider.VerifyData(originalData, new SHA512CryptoServiceProvider(), signedData))
                 {
                     Log.Information("The data is verified.");
                     return true;
