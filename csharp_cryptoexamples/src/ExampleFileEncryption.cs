@@ -64,7 +64,7 @@ namespace com.cryptoexamples.csharp
             var nonce = new byte[NonceBitSize / 8];
             Random.NextBytes(nonce, 0, nonce.Length);
 
-            var cipher = new GcmBlockCipher(new AesFastEngine());
+            var cipher = new GcmBlockCipher(new AesEngine());
             var parameters = new AeadParameters(new KeyParameter(key.GetKey()), MacBitSize, nonce, nonSecretPayload);
             cipher.Init(true, parameters);
 
@@ -119,7 +119,7 @@ namespace com.cryptoexamples.csharp
                 //Grab Nonce
                 nonce = cipherReader.ReadBytes(NonceBitSize / 8);
 
-                cipher = new GcmBlockCipher(new AesFastEngine());
+                cipher = new GcmBlockCipher(new AesEngine());
                 parameters = new AeadParameters(new KeyParameter(key.GetKey()), MacBitSize, nonce, nonSecretPayload);
                 cipher.Init(false, parameters);
 
