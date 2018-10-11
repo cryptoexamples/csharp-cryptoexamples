@@ -24,9 +24,8 @@ namespace com.cryptoexamples.csharp
         {
             try
             {
-                //----------------------------Signing---------------------------------
+                #region - Signing -
 
-                //Convert the plaintext to there utf-8 byte representation.
                 byte[] originalData = Encoding.UTF8.GetBytes(plainText);
                 //Generate a new key-pair.
                 RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider
@@ -35,21 +34,22 @@ namespace com.cryptoexamples.csharp
                 };
                 //Hash and sign the data with SHA-512.
                 byte[] signedData = rSACryptoServiceProvider.SignData(originalData, new SHA512CryptoServiceProvider());
-                //Convert the signed data to a representative string.
+
                 string signature = Convert.ToBase64String(signedData);
 
+                #endregion
 
-                //----------------------------Verification----------------------------
+                #region - Verification -
 
-                //Convert the signature to the base64 byte representation.
                 signedData = Convert.FromBase64String(signature);
-                //Verify the data.
                 if (rSACryptoServiceProvider.VerifyData(originalData, new SHA512CryptoServiceProvider(), signedData))
                 {
                     Log.Information("The data is verified.");
                     return true;
                 }
                 else { Log.Information("The data is not verified."); }
+
+                #endregion§
             }
             catch (CryptographicException e)
             {
