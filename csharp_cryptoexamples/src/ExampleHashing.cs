@@ -21,9 +21,8 @@ namespace com.cryptoexamples.csharp
         }
 
         public static string DemonstrateHashing(string plainText)
-        { 
+        {
             HashAlgorithm hashAlgorithm = SHA512.Create();
-            //Generate hash and convert it to a base64 string.
             string hashString = Convert.ToBase64String(hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(plainText)));
             //Base64 add up to two '=' as padding depending on the length of the converted data. '=' is not part of the character set of base64 so no valid data will be removed.
             hashString = hashString.Replace("=", "");

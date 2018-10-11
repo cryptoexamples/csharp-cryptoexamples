@@ -21,29 +21,28 @@ namespace com.cryptoexamples.csharp
 
         public static string DemonstrateAsymetricStringEncryption(string plainText)
         {
-            //Contains the binary representation of the string that should be encrypted.
             byte[] dataForEncryption = System.Text.Encoding.UTF8.GetBytes(plainText);
-            //Create a new key pair with keysize of 4096.
+            //Create a new key pair with keysize 4096.
             RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider
             {
                 KeySize = 4096
             };
 
-            //----------------------------Encrypt----------------------------
-
-            //Encrypt the binary string with the RSA-Provider.
+            #region - Encrypt -
+            
             byte[] encryptedData = rSACryptoServiceProvider.Encrypt(dataForEncryption, false);
-            //Convert the encrypted binary to a string.
             string encryptedString = Convert.ToBase64String(encryptedData);
 
-            //----------------------------Decrypt----------------------------
+            #endregion
 
-            //Convert the encrypted string to it's binary representation.
+            #region - Decrypt -
+            
             byte[] decryptedData = Convert.FromBase64String(encryptedString);
-            //Decrypt the data with the RSA-Provider and convert the resulting byte array to an UTF-8 string.
             string decryptedString = System.Text.Encoding.UTF8.GetString(rSACryptoServiceProvider.Decrypt(decryptedData, false));
 
             Log.Information("Decrypted and original plain text are the same: {0}", decryptedString.Equals(plainText));
+
+            #endregion
 
             return decryptedString;
         }

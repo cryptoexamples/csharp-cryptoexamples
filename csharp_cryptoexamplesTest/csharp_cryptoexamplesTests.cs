@@ -7,7 +7,7 @@ namespace XUnitTestProject1
 {
     public class UnitTest1
     {
-        private readonly string plainText = "Lorem ipsum dolor sit amet, consetetur sadipscing elitr, sed diam nonumy eirmod tempor invidunt ut labore et dolore magna aliquyam erat, sed diam voluptua.";
+        private readonly string plainText = "Multiline text:\nMultiline text:\n";
         private StringWriter outMessage;
         private StringWriter errMessage;
         
