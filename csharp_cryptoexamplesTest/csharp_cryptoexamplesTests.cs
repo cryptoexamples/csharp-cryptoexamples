@@ -59,7 +59,7 @@ namespace XUnitTestProject1
         {
             Refresh();
             ExampleSignature.Main();
-            Assert.Contains("Signature is correct: true", outMessage.ToString());
+            Assert.Contains("Signature is correct: True", outMessage.ToString());
         }
 
         [Fact]
