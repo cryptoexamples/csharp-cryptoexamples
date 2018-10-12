@@ -51,8 +51,7 @@ namespace XUnitTestProject1
         [Fact]
         public void HashingTest()
         {
-            Refresh();
-            Assert.Equal("VGV4dCB0aGF0IHNob3VsZCBiZSBhdXRoZW50aWNhdGVkIGJ5IGNvbXBhcmluZyB0aGUgaGFzaCBvZiBpdCE=", ExampleHashing.DemonstrateHashing("Text that should be authenticated by comparing the hash of it!"));
+            Assert.Equal("jg0X629+SmdP0/LTHZV/3zXBrizM3/hptRZVIuTXSCtyaqAe0NB8KMld2qebBIXFS1yowCUpCPu93l/fPmKEXg==", ExampleHashing.DemonstrateHashing("Text that should be authenticated by comparing the hash of it!"));
         }
 
         [Fact]
@@ -60,7 +59,7 @@ namespace XUnitTestProject1
         {
             Refresh();
             ExampleSignature.Main();
-            Assert.Contains("Signature is correct: True", outMessage.ToString());
+            Assert.Contains("Signature is correct: true", outMessage.ToString());
         }
 
         [Fact]
