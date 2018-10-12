@@ -14,20 +14,20 @@ namespace com.cryptoexamples.csharp
     /// </summary>
     public static class ExampleHashing
     {
+        public static string DemonstrateHashing(string plainText)
+        {
+            HashAlgorithm hashAlgorithm = SHA512.Create();
+            string hashString = Convert.ToBase64String(hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(plainText)));
+            
+            Log.Information("The hashed value is: {0}", hashString);
+            return hashString;
+        }
+
         public static void Main()
         {
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateHashing("Text that should be authenticated by comparing the hash of it!");
         }
 
-        public static string DemonstrateHashing(string plainText)
-        {
-            HashAlgorithm hashAlgorithm = SHA512.Create();
-            string hashString = Convert.ToBase64String(hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(plainText)));
-            //Base64 add up to two '=' as padding depending on the length of the converted data. '=' is not part of the character set of base64 so no valid data will be removed.
-            hashString = hashString.Replace("=", "");
-            Log.Information("The hashed value is: {0}", hashString);
-            return hashString;
-        }
     }
 }

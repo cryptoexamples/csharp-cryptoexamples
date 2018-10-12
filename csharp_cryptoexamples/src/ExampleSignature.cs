@@ -14,42 +14,25 @@ namespace com.cryptoexamples.csharp
     /// </summary>
     public static class ExampleSignature
     {
-        public static void Main()
-        {
-            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-            DemonstrateSigning("Text that should be signed to prevent unknown tampering with its content.");
-        }
-        
         public static bool DemonstrateSigning(string plainText)
         {
             try
             {
-                #region - Signing -
-
+                #region SIGNING
                 byte[] originalData = Encoding.UTF8.GetBytes(plainText);
                 //Generate a new key-pair.
                 RSACryptoServiceProvider rSACryptoServiceProvider = new RSACryptoServiceProvider
                 {
                     KeySize = 4096
                 };
-                //Hash and sign the data with SHA-512.
                 byte[] signedData = rSACryptoServiceProvider.SignData(originalData, new SHA512CryptoServiceProvider());
-
                 string signature = Convert.ToBase64String(signedData);
-
                 #endregion
 
-                #region - Verification -
-
+                #region VERIFIACTION
                 signedData = Convert.FromBase64String(signature);
-                if (rSACryptoServiceProvider.VerifyData(originalData, new SHA512CryptoServiceProvider(), signedData))
-                {
-                    Log.Information("The data is verified.");
-                    return true;
-                }
-                else { Log.Information("The data is not verified."); }
-
-                #endregion§
+                Log.Error("Signature is correct: {0}", rSACryptoServiceProvider.VerifyData(originalData, new SHA512CryptoServiceProvider(), signedData));
+                #endregion
             }
             catch (CryptographicException e)
             {
@@ -57,5 +40,12 @@ namespace com.cryptoexamples.csharp
             }
             return false;
         }
+
+        public static void Main()
+        {
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            DemonstrateSigning("Text that should be signed to prevent unknown tampering with its content.");
+        }
+        
     }
 }

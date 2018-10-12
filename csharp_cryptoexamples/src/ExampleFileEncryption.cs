@@ -21,18 +21,9 @@ namespace com.cryptoexamples.csharp
     /// </summary>
     public static class ExampleFileEncryption
     {        
-        public static readonly string inputFile = @"encryptedFile.enc";
-
-        public static void Main()
-        {
-            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-            Log.Information(DemonstrateFileEncryption("Multiline text:\nMultiline text:\n", "ThePasswordToDecryptAndEncryptTheFile"));
-        }
-
         public static string DemonstrateFileEncryption(string plainText, string password)
         {
-            #region - Encrypt -
-
+            #region INITIALIZATION
             SecureRandom Random = new SecureRandom();
             byte[] dataForEncryption = Encoding.UTF8.GetBytes(plainText);
             Pkcs5S2ParametersGenerator pkcs5S2ParametersGenerator = new Pkcs5S2ParametersGenerator();
@@ -41,7 +32,6 @@ namespace com.cryptoexamples.csharp
 
             pkcs5S2ParametersGenerator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()), salt, 10000);
 
-            //Generate key.
             KeyParameter key = (KeyParameter)pkcs5S2ParametersGenerator.GenerateDerivedMacParameters(256);
             
             byte[] nonce = new byte[128 / 8];
@@ -50,6 +40,8 @@ namespace com.cryptoexamples.csharp
             AeadParameters aeadParameters = new AeadParameters(new KeyParameter(key.GetKey()), 128, nonce, salt);
             gcmBlockCipher.Init(true, aeadParameters);
 
+            #endregion
+            #region ENCRYPTION
             //Generate ciphertext with authentication tag.
             byte[] cipherTextAsByteArray = new byte[gcmBlockCipher.GetOutputSize(dataForEncryption.Length)];
             int length = gcmBlockCipher.ProcessBytes(dataForEncryption, 0, dataForEncryption.Length, cipherTextAsByteArray, 0);
@@ -66,22 +58,14 @@ namespace com.cryptoexamples.csharp
                 }
                 output = memoryStream.ToArray();
             }
-            File.WriteAllBytes(inputFile, output);
-
+            File.WriteAllBytes("encryptedFile.enc", output);
             #endregion
 
-            #region - Decrypt -
-            
-            byte[] encryptedMessageAsByteArray = File.ReadAllBytes(inputFile);
-            pkcs5S2ParametersGenerator = new Pkcs5S2ParametersGenerator();
+            #region DECRYPTION
+            byte[] encryptedMessageAsByteArray = File.ReadAllBytes("encryptedFile.enc");
             
             salt = new byte[128 / 8];
             Array.Copy(encryptedMessageAsByteArray, salt, salt.Length);
-
-            pkcs5S2ParametersGenerator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()), salt, 10000);
-
-            //Generate key.
-            key = (KeyParameter)pkcs5S2ParametersGenerator.GenerateDerivedMacParameters(256);
 
             using (MemoryStream memoryStream = new MemoryStream(encryptedMessageAsByteArray))
             using (BinaryReader binaryReader = new BinaryReader(memoryStream))
@@ -92,7 +76,6 @@ namespace com.cryptoexamples.csharp
                 aeadParameters = new AeadParameters(new KeyParameter(key.GetKey()), 128, nonce, salt);
                 gcmBlockCipher.Init(false, aeadParameters);
 
-                //Decrypt ciphertext.
                 cipherTextAsByteArray = binaryReader.ReadBytes(encryptedMessageAsByteArray.Length - salt.Length - nonce.Length);
                 byte[] decryptedTextAsByteArray = new byte[gcmBlockCipher.GetOutputSize(cipherTextAsByteArray.Length)];
 
@@ -111,9 +94,17 @@ namespace com.cryptoexamples.csharp
                 }
                 Log.Information("Decrypted file content and original plain text are the same: {0}", plainText.Equals(Encoding.UTF8.GetString(decryptedTextAsByteArray)));
                 return Encoding.UTF8.GetString(decryptedTextAsByteArray);
+                #endregion
             }
 
-            #endregion
+            
         }
+
+        public static void Main()
+        {
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            Log.Information(DemonstrateFileEncryption("Multiline text:\nMultiline text:\n", "ThePasswordToDecryptAndEncryptTheFile"));
+        }
+
     }
 }

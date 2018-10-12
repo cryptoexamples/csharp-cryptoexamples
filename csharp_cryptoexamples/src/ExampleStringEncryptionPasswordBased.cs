@@ -20,20 +20,13 @@ namespace com.cryptoexamples.csharp
     /// </summary>
     public static class ExampleStringEncryptionPasswordBased
     {
-        public static void Main()
-        {
-            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-            DemonstrateStringEncryptionPasswordBased("Text that is going to be sent over an insecure channel and must be encrypted at all costs!", "SuperSafe");
-        }
-
         public static string DemonstrateStringEncryptionPasswordBased(string plainText, string password)
         {
             string decryptedCipherText = "";
             //If the password from the user can't be empty or null. Instead this would be the same as 'StringEncryptionKeyBased'.
             if (!string.IsNullOrEmpty(password))
             {
-                #region - Encrypt -
-
+                #region ENCRYPTION
                 SecureRandom Random = new SecureRandom();
                 byte[] dataForEncryption = Encoding.UTF8.GetBytes(plainText);
                 Pkcs5S2ParametersGenerator pkcs5S2ParametersGenerator = new Pkcs5S2ParametersGenerator();
@@ -42,7 +35,6 @@ namespace com.cryptoexamples.csharp
 
                 pkcs5S2ParametersGenerator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()), salt, 10000);
 
-                //Generate key.
                 KeyParameter key = (KeyParameter)pkcs5S2ParametersGenerator.GenerateDerivedMacParameters(256);
 
                 byte[] nonce = new byte[128 / 8];
@@ -51,12 +43,13 @@ namespace com.cryptoexamples.csharp
                 AeadParameters aeadParameters = new AeadParameters(new KeyParameter(key.GetKey()), 128, nonce, salt);
                 gcmBlockCipher.Init(true, aeadParameters);
 
-                //Generate ciphertext with authentication tag.
+                // Generate ciphertext with authentication tag.
                 byte[] cipherTextAsByteArray = new byte[gcmBlockCipher.GetOutputSize(dataForEncryption.Length)];
                 int length = gcmBlockCipher.ProcessBytes(dataForEncryption, 0, dataForEncryption.Length, cipherTextAsByteArray, 0);
                 gcmBlockCipher.DoFinal(cipherTextAsByteArray, length);
                 byte[] cipherTextBytes;
-                //Put the pices of the message together.
+                
+                //PREPED SALT AND NONCE
                 using (MemoryStream memoryStream = new MemoryStream())
                 {
                     using (BinaryWriter binaryWriter = new BinaryWriter(memoryStream))
@@ -68,21 +61,13 @@ namespace com.cryptoexamples.csharp
                     cipherTextBytes = memoryStream.ToArray();
                 }
                 string cipherText = Convert.ToBase64String(cipherTextBytes);
-
                 #endregion
 
-                #region - Decrypt -
-
+                #region DECRYPTION
                 byte[] encryptedMessageAsByteArray = Convert.FromBase64String(cipherText);
-                pkcs5S2ParametersGenerator = new Pkcs5S2ParametersGenerator();
 
                 salt = new byte[128 / 8];
                 Array.Copy(encryptedMessageAsByteArray, salt, salt.Length);
-
-                pkcs5S2ParametersGenerator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(password.ToCharArray()), salt, 10000);
-
-                //Generate key.
-                key = (KeyParameter)pkcs5S2ParametersGenerator.GenerateDerivedMacParameters(256);
 
                 using (MemoryStream memoryStream = new MemoryStream(encryptedMessageAsByteArray))
                 using (BinaryReader binaryReader = new BinaryReader(memoryStream))
@@ -93,32 +78,36 @@ namespace com.cryptoexamples.csharp
                     aeadParameters = new AeadParameters(new KeyParameter(key.GetKey()), 128, nonce, salt);
                     gcmBlockCipher.Init(false, aeadParameters);
 
-                    //Decrypt ciphertext.
                     cipherTextAsByteArray = binaryReader.ReadBytes(encryptedMessageAsByteArray.Length - salt.Length - nonce.Length);
                     byte[] decryptedTextAsByteArray = new byte[gcmBlockCipher.GetOutputSize(cipherTextAsByteArray.Length)];
 
+                    // CHECK AUTHENTICATION
                     try
                     {
-                        //Authentication check.
                         length = gcmBlockCipher.ProcessBytes(cipherTextAsByteArray, 0, cipherTextAsByteArray.Length, decryptedTextAsByteArray, 0);
                         gcmBlockCipher.DoFinal(decryptedTextAsByteArray, length);
 
                     }
                     catch (InvalidCipherTextException e)
                     {
-                        //Authentication failed.
                         Log.Error("Error: {0}", e.Message);
                         return null;
                     }
                     Log.Information("Decrypted and original plain text are the same: {0}", plainText.Equals(Encoding.UTF8.GetString(decryptedTextAsByteArray)));
                     return Encoding.UTF8.GetString(decryptedTextAsByteArray);
+                    #endregion
                 }
-
-                #endregion
             }
             else { Log.Error("Error: {0}", "Password can't be empty or null!"); }
-            return decryptedCipherText;
+            return null;
         }
+
+        public static void Main()
+        {
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            DemonstrateStringEncryptionPasswordBased("Text that is going to be sent over an insecure channel and must be encrypted at all costs!", "SuperSafe");
+        }
+
     }
 }
 

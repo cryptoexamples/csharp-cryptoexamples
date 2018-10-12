@@ -6,12 +6,6 @@ namespace csharp_cryptoexamples.src
 {
     public static class ExmapleKeyStorageProvider
     {
-        public static void Main()
-        {
-            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
-            DemonstrateKeyStorage("MyKeyContainerName");
-        }
-
         public static RSACryptoServiceProvider DemonstrateKeyStorage(string ContainerName)
         {
             //---- Fill Parameter in KSP ---------
@@ -47,5 +41,12 @@ namespace csharp_cryptoexamples.src
             Log.Information("The password before and after keystorage are the same: {0}", cspParameters.KeyPassword.Equals(cspParametersFromKSP.KeyPassword));
             return rSACryptoServiceProvider;
         }
+
+        public static void Main()
+        {
+            Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
+            DemonstrateKeyStorage("MyKeyContainerName");
+        }
+
     }
 }
