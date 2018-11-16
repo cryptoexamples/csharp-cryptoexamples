@@ -28,9 +28,7 @@ namespace com.cryptoexamples.csharp
             // DECRYPTION
             byte[] decryptedData = Convert.FromBase64String(encryptedString);
             string decryptedString = System.Text.Encoding.UTF8.GetString(rSACryptoServiceProvider.Decrypt(decryptedData, false));
-
             Log.Information("Decrypted and original plain text are the same: {0}", decryptedString.Equals(plainText));
-
             return decryptedString;
         }
 
@@ -39,6 +37,5 @@ namespace com.cryptoexamples.csharp
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateAsymetricStringEncryption("Text that is going to be sent over an insecure channel and must be encrypted at all costs!");
         }
-
     }
 }

@@ -16,6 +16,7 @@ namespace com.cryptoexamples.csharp
     {
         public static bool DemonstrateSigning(string plainText)
         {
+            bool veryfied = false;
             try
             {
                 #region SIGNING
@@ -31,14 +32,15 @@ namespace com.cryptoexamples.csharp
 
                 #region VERIFIACTION
                 signedData = Convert.FromBase64String(signature);
-                Log.Error("Signature is correct: {0}", rSACryptoServiceProvider.VerifyData(originalData, new SHA512CryptoServiceProvider(), signedData));
+                veryfied = rSACryptoServiceProvider.VerifyData(originalData, new SHA512CryptoServiceProvider(), signedData);
+                Log.Information("Signature is correct: {0}", veryfied);
                 #endregion
             }
             catch (CryptographicException e)
             {
                 Log.Error("Error: {0}", e.Message);
             }
-            return false;
+            return veryfied;
         }
 
         public static void Main()
@@ -46,6 +48,5 @@ namespace com.cryptoexamples.csharp
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateSigning("Text that should be signed to prevent unknown tampering with its content.");
         }
-        
     }
 }

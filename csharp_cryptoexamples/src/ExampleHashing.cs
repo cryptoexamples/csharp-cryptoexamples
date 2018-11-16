@@ -18,7 +18,6 @@ namespace com.cryptoexamples.csharp
         {
             HashAlgorithm hashAlgorithm = SHA512.Create();
             string hashString = Convert.ToBase64String(hashAlgorithm.ComputeHash(Encoding.UTF8.GetBytes(plainText)));
-            
             Log.Information("The hashed value is: {0}", hashString);
             return hashString;
         }
@@ -28,6 +27,5 @@ namespace com.cryptoexamples.csharp
             Log.Logger = new LoggerConfiguration().WriteTo.Console().CreateLogger();
             DemonstrateHashing("Text that should be authenticated by comparing the hash of it!");
         }
-
     }
 }
