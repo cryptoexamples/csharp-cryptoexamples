@@ -35,11 +35,11 @@ namespace com.cryptoexamples.csharp
             SecureRandom Random = new SecureRandom();
             byte[] dataForEncryption = Encoding.UTF8.GetBytes(plainText);
             Pkcs5S2ParametersGenerator pkcs5S2ParametersGenerator = new Pkcs5S2ParametersGenerator();
-            byte[] salt = new byte[128 / 8];
+            byte[] salt = new byte[16];
             Random.NextBytes(salt);
             pkcs5S2ParametersGenerator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(randomKey.ToCharArray()), salt, 10000);
             KeyParameter key = (KeyParameter)pkcs5S2ParametersGenerator.GenerateDerivedMacParameters(256);
-            byte[] nonce = new byte[128 / 8];
+            byte[] nonce = new byte[16];
             Random.NextBytes(nonce);
             GcmBlockCipher gcmBlockCipher = new GcmBlockCipher(new AesEngine());
             AeadParameters aeadParameters = new AeadParameters(new KeyParameter(key.GetKey()), 128, nonce, salt);
@@ -67,14 +67,14 @@ namespace com.cryptoexamples.csharp
 
             #region DECRYPTION
             byte[] encryptedMessageAsByteArray = Convert.FromBase64String(cipherText);
-            salt = new byte[128 / 8];
+            salt = new byte[16];
             Array.Copy(encryptedMessageAsByteArray, salt, salt.Length);
             pkcs5S2ParametersGenerator.Init(PbeParametersGenerator.Pkcs5PasswordToBytes(randomKey.ToCharArray()), salt, 10000);
 
             using (BinaryReader binaryReader = new BinaryReader(new MemoryStream(encryptedMessageAsByteArray)))
             {
                 salt = binaryReader.ReadBytes(salt.Length);
-                nonce = binaryReader.ReadBytes(128 / 8);
+                nonce = binaryReader.ReadBytes(16);
                 gcmBlockCipher = new GcmBlockCipher(new AesEngine());
                 aeadParameters = new AeadParameters(new KeyParameter(key.GetKey()), 128, nonce, salt);
                 gcmBlockCipher.Init(false, aeadParameters);
